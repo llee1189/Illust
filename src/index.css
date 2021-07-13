@@ -28,6 +28,7 @@ margin: 0px;
   grid-row: 1/2;
   color: black;
   font-size: 3em;
+  cursor: default;
 }
 
 .login-middle {
@@ -44,7 +45,8 @@ margin: 0px;
   margin: 5px 20px;
   border: 1px solid grey;
   border-radius: 5px;
-  background-color: #FAFAFA
+  background-color: #FAFAFA;
+  outline: none;
 }
 
 .login-submit-input {
@@ -57,6 +59,10 @@ margin: 0px;
   font-weight: bold;
 }
 
+.login-submit-input-button {
+  cursor: pointer;
+}
+
 .login-bottom {
   display: flex;
   flex-direction: column;
@@ -67,8 +73,9 @@ margin: 0px;
 }
 
 .login-bottom div {
-  width: fit-content;
+  width: max-content;
   cursor: pointer;
+  margin: 5px 0px;
 }
 
 .main-container {
@@ -76,23 +83,97 @@ margin: 0px;
   min-height: 100vh;
   grid-template-columns: 1fr 700px 1fr;
   grid-template-rows: 60px 1fr;
+  background-color: #F7F7F7;
 }
 
 .menu {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 50px;
-  padding-top: 30px;
-  grid-column: 2 / 3;
-  grid-row: 1 / 2;
+  grid-column: 1 / 4;
+  display: grid;
+  grid-template-columns: auto 700px auto;
+  overflow: hidden;
+  width: 100%;
   border-bottom: 1px solid grey;
+  background-color:white;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
-.feed{
+.menu-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  grid-column: 2 / 3;
+}
+
+.menu-name {
+  cursor: default;
+  font-size: 2em;
+}
+
+.search {
+  height: 45%;
+  width: 30%;
+  border: 1px solid grey;
+  border-radius: 2px;
+  outline: none;
+  background-color: #FAFAFA;
+}
+
+.menu-options {
+  display: flex;
+}
+
+.menu-options > *{
+  margin: 0px 10px;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.drop {
+  cursor: default;
+  position: fixed;
+  background-color: white;
+  border: 1px solid grey;
+  top: 50px;
+  width: 200px;
+  transform: translateX(-75%);
+  border-radius: 10px;
+}
+
+.drop li {
+  cursor: pointer;
+  display: flex;
+  font-size: .85em;
+  list-style: none;
+  padding: 12px 8px;
+}
+
+.drop :hover {
+  background-color: #F7F7F7;
+}
+
+.drop li > * {
+  margin: 0px 5px;
+}
+
+.drop li:first-child {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.drop li:last-child {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-top: 1px solid grey;
+}
+
+.feed {
   display: grid;
   grid-template-columns: 500px 200px;
   grid-column: 2 / 3;
   grid-row: 2 / 3;
+  margin-top: 20px;
 }
 
 .feed-photos{
@@ -100,7 +181,239 @@ margin: 0px;
   flex-direction: column;
 }
 
-.feed-photos div{
-  height: 200px;
-  word-wrap: break-word;
+.feed-photos-border {
+  display: grid;
+  grid-template-rows: 1fr 20px 60px;
+  border: 1px solid grey;
+  border-radius: 2px;
+  margin: 10px 0px;
+}
+
+.user {
+  grid-row: 2 / 3;
+}
+
+.photo {
+  width: 458px;
+  height: 478px;
+  object-fit: cover;
+  margin: 0;
+  padding: 0px;
+  border-top: 20px solid white;
+  border-left: 20px solid white;
+  border-right: 20px solid white;
+}
+
+.caption {
+  grid-row: 3 / 4;
+
+}
+
+
+.feed-misc {
+  grid-column: 2 / 3;
+  padding: 0px 10px;
+  padding-top: 15px;
+}
+
+.feed-misc-text{
+  position: fixed;
+  overflow: hidden;
+  width: min-content;
+}
+
+br {
+
+}
+
+.account-name {
+  font-size: 1.5em;
+}
+
+.about{
+  margin-top: 10px;
+  display: flex;
+  font-size: .9em;
+  color: grey;
+  word-wrap:unset
+}
+
+.account-name {
+  margin-left: 8px;
+}
+
+.about > * {
+  cursor: pointer;
+  margin: 0px 8px;
+}
+
+.about-text {
+  margin-left: 8px;
+}
+
+.about-text > div {
+  margin: 10px 0px;
+}
+
+
+.signup-container {
+  display: grid;
+  min-height: 100vh;
+  grid-template-columns: auto 350px auto;
+  grid-template-rows: 1fr 500px 1fr;
+  background-color: #F7F7F7;
+}
+
+.signup {
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  grid-template-rows: 1fr 50px 1fr 1fr;
+  border: 1px solid grey;
+  border-radius: 4px;
+  grid-column: 2/3;
+  grid-row: 2/3;
+  background-color: white;
+}
+
+.signup-top {
+  margin-top: 50px;
+  text-align: center;
+  grid-column: 1/4;
+  grid-row: 1/2;
+  color: black;
+  font-size: 3em;
+  cursor: default;
+}
+
+.signup-top-after {
+  text-align: center;
+  grid-column: 1/4;
+  grid-row:2/3;
+  padding: 0 70px;
+  cursor: default;
+}
+
+.signup-middle {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1/4;
+  grid-row: 3/4;
+  text-align: left;
+  padding: 0 20px;
+}
+
+.signup-text-input {
+  padding: 10px 5px;
+  margin: 5px 20px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  background-color: #FAFAFA;
+  outline: none;
+}
+
+.signup-submit-input {
+  padding: 10px 0;
+  margin: 20px 20px;
+  background-color: #57A1FF;
+  border:0;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+}
+
+.signup-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  grid-column:2/3;
+  grid-row: 4/5;
+  color: #008FFF;
+}
+
+.signup-bottom div {
+  width:max-content;
+  cursor: pointer;
+}
+
+.signup-submit-input-button {
+  cursor: pointer;
+}
+
+.add-photo-container {
+  display: grid;
+  grid-template-columns: 100px 500px 100px;
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+}
+
+.add-photo {
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  grid-column: 2 / 3;
+  width: 500px
+}
+
+.stock-photo {
+  display:flex;
+  flex-direction: column;
+}
+
+.choose-file {
+  font-size: 1.1em;
+}
+
+.caption-text {
+  margin-top: 10px;
+  outline: none;
+  border: none;
+  background-color: #F7F7F7;
+  font-size: 1.5em;
+  width: 500px;
+}
+
+
+.upload-button {
+  cursor: pointer;
+  padding: 10px 60px;
+  margin: 10px 20px;
+  background-color: #57A1FF;
+  border:0;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+}
+
+.temp-photo-div {
+  border: 1px solid grey;
+  margin-top: 20px;
+  background-color: white;
+}
+
+progress {
+width: 100%;
+}
+
+.temp-photo {
+  width: 458px;
+  height: 478px;
+  object-fit: cover;
+  margin: 0;
+  padding: 0px;
+  border-top: 20px solid white;
+  border-left: 20px solid white;
+  border-right: 20px solid white;
+  border-bottom: 60px solid white;
+  background-color: white;
+  
+}
+
+.no-photo {
+  width: 458px;
+  height: 482px;
+  background-color: black;
+  border-left: 20px solid white;
+  border-right: 20px solid white;
+  border-bottom: 60px solid white;
+  margin-top: 20px;
 }
