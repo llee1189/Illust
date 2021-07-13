@@ -14,12 +14,18 @@ const Signup = ({onSignup, onMain, onUsername}) => {
             alert('Please fill out all forms.');
             return;
         }
+
+        if(password !== rpassword) {
+            alert('Passwords do not match')
+            return
+        }
         firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((user) => {
             user.user.updateProfile({
                 displayName: username
             })
             onUsername(username);
+            onSignup();
             onMain();
         })
         .catch((error) => {

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import firebase from "firebase"
 
-const Login = ({onSignup, onMain, onUsername}) => {
+const Login = ({onSignup, onMain, onUsername, onGuest}) => {
 
     const[email, setEmail] = useState('')
     const[password, setPassword] = useState('')
@@ -14,8 +14,6 @@ const Login = ({onSignup, onMain, onUsername}) => {
         }
         firebase.auth().signInWithEmailAndPassword(email, password)
         .then((user) => {
-            console.log(user.user.displayName);
-            console.log(user.user.uid);
             onUsername(user.user.displayName);
             onMain();
         })
@@ -40,9 +38,9 @@ const Login = ({onSignup, onMain, onUsername}) => {
                 </form>       
 
                 <div className='login-bottom'>
-                    <div>Forgot password?</div>
+                    {/* <div>Forgot password?</div> */}
                     <div onClick={onSignup}>Sign up</div>
-                    <div>View as guest</div>
+                    <div onClick={onGuest}>View as guest</div>
                 </div>        
             </div>
         </div>

@@ -3,12 +3,14 @@ import Login from './content/Login'
 import Main from './content/Main'
 import AddPhoto from './content/AddPhoto'
 import Signup from './content/Signup'
+import Guest from './content/Guest';
 import { db } from './Firebase';
 
 
 function App() {
 const[photos, setPhotos] = useState([])
 const[showSignup, setShowSignup] = useState(false)
+const[showGuest, setShowGuest] = useState(false)
 const[showMain, setShowMain] = useState(false)
 const[showAddPhoto, setShowAddPhoto] = useState(false)
 const[user, setUser] = useState(null);
@@ -26,7 +28,7 @@ useEffect(() => {
 }, [log]);
 
 useEffect(() => {
-  console.log(username);
+
 
   db.collection('photos').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
     setPhotos(snapshot.docs.map(doc => ({
@@ -39,10 +41,11 @@ useEffect(() => {
   return(
     <div>
     {
+      showGuest ? <Guest photos={photos} username={username} guest={showGuest} onGuest={()=>setShowGuest(!showGuest)}/> :
       showAddPhoto ? <AddPhoto onAddPhoto={() => setShowAddPhoto(!showAddPhoto)} username={username} onHome={()=>setShowAddPhoto(false)} onLog={()=>setLog(true)}/>:
       showMain ? <Main photos={photos} username={username} onAddPhoto={() => setShowAddPhoto(!showAddPhoto)} onHome={()=>setShowAddPhoto(false)} onMain={()=>setShowMain(!showMain)}/>:
       showSignup ? <Signup onSignup={()=> setShowSignup(!showSignup)} onMain={()=> setShowMain(!showMain)} onUsername={(u) => setUsername(u)}/>:
-      <Login onSignup={()=> setShowSignup(!showSignup)} onMain={()=> setShowMain(!showMain)} onUsername={(u) => setUsername(u)}/>
+      <Login onSignup={()=> setShowSignup(!showSignup)} onMain={()=> setShowMain(!showMain)} onUsername={(u) => setUsername(u)} onGuest={()=> setShowGuest(!false)}/>
     }
     </div>
   );

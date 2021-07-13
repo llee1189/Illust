@@ -24,7 +24,7 @@ const Main = ({photos, username, onAddPhoto, onMain}) => {
             <div className='menu'>
                 <div className='menu-text'>
                     <div className='menu-name'>Illust.</div>
-                    <input type='text' placeholder='Search' className='search'/>
+                    <input type='text' placeholder='Search Currently Unavailable' className='search'/>
                     <div className='menu-options'>
                         <AiFillHome/>
                         <AiFillMessage/>
@@ -37,7 +37,7 @@ const Main = ({photos, username, onAddPhoto, onMain}) => {
                 <div className ='feed-photos'>
                     {
                         photos.map(({id, photo}) => (
-                            <Photo key={id} user={photo.user} photo={photo.photo} caption={photo.caption}></Photo>
+                            <Photo key={id} pid={id} user={photo.user} photo={photo.photo} caption={photo.caption} username={username}></Photo>
                         ))
                     }
                 </div>
@@ -45,9 +45,9 @@ const Main = ({photos, username, onAddPhoto, onMain}) => {
                     <div className ='feed-misc-text'>
                         <div className='account-name'>Logged in as: {username}</div>
                         <div className='about'>
-                            <div onClick={() => {if (misc !== '') {setMisc('')} else{ setMisc('about')}}}>About</div>
-                            <div onClick={() => {if (misc !== '') {setMisc('')} else{ setMisc('contact')}}}>Contact</div>
-                            <div onClick={() => {if (misc !== '') {setMisc('')} else{ setMisc('notes')}}}>Notes</div>
+                            <div onClick={() => {if (misc !== 'about') {setMisc('about')} else{ setMisc('')}}}>About</div>
+                            <div onClick={() => {if (misc !== 'contact') {setMisc('contact')} else{ setMisc('')}}}>Contact</div>
+                            <div onClick={() => {if (misc !== 'notes') {setMisc('notes')} else{ setMisc('')}}}>Notes</div>
                         </div>
                         {misc === 'about' ? <About/>:
                         misc === 'contact' ? <Contact/>:
@@ -83,7 +83,7 @@ export function Dropdown(props) {
     )
 }
 
-function About() {
+export function About() {
     return (
         <div className='about-text'>
             <div>Hey! This is an early stage of a website I am designing to practice web development with React for the front and with Firebase for the back.</div>
@@ -94,7 +94,7 @@ function About() {
     )
 }
 
-function Contact() {
+export function Contact() {
     return (
         <div className='about-text'>
             <div>If you're trying to reach me, you can email me at k.lance.lee@gmail.com</div>
@@ -103,7 +103,7 @@ function Contact() {
     )
 }
 
-function Notes() {
+export function Notes() {
     return(
         <div className='about-text'>
             <div>Major things to add:
