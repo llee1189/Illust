@@ -5,6 +5,9 @@ This project is an attempt to create an Instagram/Art Community clone to practic
 ## 7/9/2021
 
 Login.js was implemented as the face for a login system. Main.js was implemented afterwards to represent the main feed of a user. Most likely, I will focus on implementing a backend or creating a fake resources of photos to demo Main.js. Additionally, I need to allow the option for a user to be a guest.   
+
+## 7/12/2021
+Significant additions since three days ago. I have now implemented a sign on/off method and users can post their own photos now. I have also cleaned up the style in general.
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
