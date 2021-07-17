@@ -1,6 +1,5 @@
-import Photo from './Photo'
-import { AiFillHeart, AiFillMessage, AiFillHome, AiOutlinePlus } from 'react-icons/ai'
-import { BsFillPersonFill, BsMoon, BsPerson} from 'react-icons/bs'
+import { AiFillHeart, AiFillMessage, AiFillHome} from 'react-icons/ai'
+import {BsPerson} from 'react-icons/bs'
 import { BiMoon } from 'react-icons/bi'
 import {RiLogoutBoxLine} from 'react-icons/ri'
 import { useState } from 'react'
@@ -9,13 +8,14 @@ import { storage, db } from '../Firebase'
 import firebase from 'firebase'
 
 
-const AddPhoto = ({onAddPhoto, username, onHome, onLog}) => {
+const AddPhoto = ({onAddPhoto, username, onHome, onLog, setdTheme, dtheme, setProfileName, setShowMessage}) => {
     const LogOut = () => {
         firebase.auth().signOut().then(() => {
             onLog();
             alert('Logging out was successful.')
         }).catch((error) => {
             alert('You are trapped here forever.')
+            console.log(error)
         });
     }
 
@@ -36,7 +36,9 @@ const AddPhoto = ({onAddPhoto, username, onHome, onLog}) => {
             alert('Please choose a file.')
             return;
         }
-        const uploadTask = storage.ref(`images/${image.name}`).put(image);
+
+        let id = firebase.firestore().collection('photos').doc().id;
+        const uploadTask = storage.ref(`images/${id}`).put(image);
         uploadTask.on(
             "state_changed",
             (snapshot) => {
@@ -52,47 +54,61 @@ const AddPhoto = ({onAddPhoto, username, onHome, onLog}) => {
             () => {
                 storage
                     .ref('images')
-                    .child(image.name)
+                    .child(id)
                     .getDownloadURL()
                     .then(url => {
-                        db.collection('photos').add({
+                        db.collection('photos').doc(id).set({
                             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                             caption: caption,
                             photo: url,
                             user: username
-                        });
+                        })
+                        .then(function(pDoc){
+                            db.collection('users').doc(username).collection('user-photos').add({
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                pid: id
+                            })
+                        })
+                        .catch((e) => console.log('There was an error uploading your photo'))
                         setProgress(0);
                         setCaption('');
                         setImage(null);
+                        alert('Photo has been published successfully.')
+                        onAddPhoto();
+                        return;
                     })
             }
         )
-        alert('Photo has been published successfully.')
-        onAddPhoto();
+
     }
     
 
     return (
-        <div className='main-container'> 
+        <div className='main-container-2' style={dtheme ? {'background-color' : '#1F1F1F', 'color': '#DCDCDC'} : {'background-color' : '#F7F7F7'}}> 
 
-        <div className='menu'>
+        <div className='menu' style={dtheme ? {'background-color' : '#323232'} : {'background-color' : '#F7F7F7'}}>
             <div className='menu-text'>
                 <div className='menu-name'>Illust.</div>
-                <input type='text' placeholder='Search' className='search'/>
                 <div className='menu-options'>
                     <AiFillHome onClick = {onHome}/>
-                    <AiFillMessage/>
+                    <AiFillMessage onClick={() => {onHome(); setShowMessage()}} />
                     <AiFillHeart/>
-                    <Dropdown><Drop LogOut={LogOut}/></Dropdown>
+                    <Dropdown><Drop LogOut={LogOut} setdTheme={setdTheme} dtheme={dtheme} setProfileName={setProfileName} username={username}/></Dropdown>
                 </div>
             </div>
         </div>
-        <div className='add-photo-container'>
-            <form className='add-photo' onSubmit={handleUpload}>
-                <div className='stock-photo'>{ url !== null ? <div className='temp-photo-div'><img className='temp-photo' src={url}/></div> : <div className='temp-photo-div'><div className='no-photo'></div></div>}
+        <div className='add-photo-container' >
+            <form className='add-photo' onSubmit={handleUpload} >
+                <div className='stock-photo' >{ url !== null ? <div className={dtheme ? 'temp-photo-div-dark' :'temp-photo-div'}><img className='temp-photo'                 style={dtheme ? {
+                    'borderColor':'#111111 ',} : {'borderColor':'white'}} src={url}/></div> : <div className={dtheme ? 'temp-photo-div-dark' :'temp-photo-div'}><div className='no-photo'
+                style={dtheme ? {
+                    'borderColor':'#111111 ',} : {'borderColor':'white'}}
+                ></div></div>}
                 <input className='choose-file' type="file" onChange={handleChange}/>
                 </div>
-                <input className='caption-text' type="text" placeholder='Write a caption...' value = {caption} onChange={(e)=> setCaption(e.target.value)}/>
+                <input className='caption-text' type="text" placeholder='Write a caption...' value = {caption} onChange={(e)=> setCaption(e.target.value)} 
+                style={dtheme ? {
+                    'background-color':'#1F1F1F', 'color':'white'} : {}}/>
                 <input className='upload-button' type='submit' value='Upload'/>
                 <progress value={progress} max='100'/>
             </form>
@@ -101,11 +117,11 @@ const AddPhoto = ({onAddPhoto, username, onHome, onLog}) => {
     )
 }
 
-export function Drop({LogOut}) {
+export function Drop({LogOut, setdTheme, dtheme, setProfileName, username}) {
     return (
-        <div className='drop'>
-            <li><BsPerson/>Profile</li>
-            <li><BiMoon/>Theme</li>
+        <div className='drop' id={dtheme ? 'drop-dark' : ''}>
+            <li onClick={() => setProfileName(username)}><BsPerson/>Profile</li>
+            <li onClick={setdTheme}><BiMoon/>Theme</li>
             <li onClick={LogOut}><RiLogoutBoxLine/>Log Out</li>
         </div>
         // Profile, Add photos, nightmode, logout

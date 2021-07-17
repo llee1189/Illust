@@ -1,12 +1,21 @@
 import { useState } from 'react'
-import firebase from 'firebase'
-import {auth} from '../Firebase';
+import {auth, db} from '../Firebase';
 
 const Signup = ({onSignup, onMain, onUsername}) => {
     const[email, setEmail] = useState('')
     const[username, setUsername] = useState('')
     const[password, setPassword] = useState('')
     const[rpassword, setrPassword] = useState('')
+
+
+    const addToDB = (u) => {
+        db.collection('users').doc(username).set({
+            uid: u.uid,
+            email: email,
+            notifications: 0,
+            hasCheckNotifications: false
+        })
+    }
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -19,21 +28,32 @@ const Signup = ({onSignup, onMain, onUsername}) => {
             alert('Passwords do not match')
             return
         }
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then((user) => {
-            user.user.updateProfile({
-                displayName: username
-            })
-            onUsername(username);
-            onSignup();
-            onMain();
+
+        db.collection('users').doc(username).get().then((snapshot) => {
+            if (snapshot.data()) {
+                alert('This username is already taken.')
+                return 
+            } else {
+                auth.createUserWithEmailAndPassword(email, password)
+                .then((auth) => {
+                    auth.user.updateProfile(
+                        {
+                            displayName: username
+                        }
+                    )
+                    onUsername(username);
+                    onSignup();
+                    onMain();
+                    addToDB(auth.user);
+                })
+                .catch((error) => {
+                    var errorCode = error.code;
+                    console.log(errorCode);
+                    var errorMessage = error.message;
+                    window.alert(errorMessage);
+                })
+            }
         })
-        .catch((error) => {
-          var errorCode = error.code;
-          console.log(errorCode);
-          var errorMessage = error.message;
-          window.alert(errorMessage);
-        });
     }
 
 

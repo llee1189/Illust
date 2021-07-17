@@ -1,7 +1,7 @@
 import { useState } from "react"
 import firebase from "firebase"
 
-const Login = ({onSignup, onMain, onUsername, onGuest}) => {
+const Login = ({onSignup, onMain, onUsername, onGuest, onUser}) => {
 
     const[email, setEmail] = useState('')
     const[password, setPassword] = useState('')
@@ -14,11 +14,13 @@ const Login = ({onSignup, onMain, onUsername, onGuest}) => {
         }
         firebase.auth().signInWithEmailAndPassword(email, password)
         .then((user) => {
+            onUser(user);
             onUsername(user.user.displayName);
             onMain();
         })
         .catch((error) => {
           var errorCode = error.code;
+          console.log(errorCode)
           var errorMessage = error.message;
           window.alert(errorMessage);
         });
